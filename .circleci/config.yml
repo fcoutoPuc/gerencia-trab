@@ -1,38 +1,49 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:node:.,test:jest:
 version: 2.1
-orbs:
-  node: circleci/node@5
+
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:16 # Choose the Node.js Docker image version that matches your project
+    working_directory: ~/repo # Set the working directory to the root of your repository
+
 jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
-    environment:
-      JEST_JUNIT_OUTPUT_DIR: ./test-results/
+  install_dependencies:
+    executor: node-executor
+    steps:
+      - checkout # Checks out the code from your repository
+      - run:
+          name: Install dependencies
+          command: |
+            npm install  # Install all the required dependencies
+
+  run_tests:
+    executor: node-executor
+    steps:
+      - checkout  # Check out your code
+      - run:
+          name: Run Jest tests
+          command: |
+            npm test  # Run your tests with Jest (e.g., npx jest)
+
+  deploy:
+    docker:
+      - image: circleci/node:16
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
       - run:
-          command: npm install jest-junit
-      - run:
-          name: Run tests
-          command: npm run test --ci --runInBand --reporters=default --reporters=jest-junit
-      - store_test_results:
-          path: ./test-results/
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Deploy Lambda (optional)
+          command: |
+            # Add your Lambda deployment commands here if needed
+            echo "Deploying Lambda..." # Placeholder for deployment step
+
 workflows:
-  build-and-test:
+  version: 2
+  test_and_deploy:
     jobs:
-      - test-node
-    # - deploy:
-    #     requires:
-    #       - test-node
+      - install_dependencies
+      - run_tests:
+          requires:
+            - install_dependencies
+      - deploy:
+          requires:
+            - run_tests
