@@ -1,0 +1,53 @@
+org: fernandocouto
+app: gerencia-trab
+service: gerencia-trab
+frameworkVersion: "4"
+
+custom:
+  tableName: "product-table-${sls:stage}"
+  esbuild:
+    bundle: true
+    minify: false
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ProductsTable, Arn]
+  environment:
+    PRODUCTS_TABLE: ${self:custom.tableName}
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: "*"
+
+resources:
+  Resources:
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
+
+package:
+  include:
+    - src/**  # This includes everything inside the src folder for the deployment package
