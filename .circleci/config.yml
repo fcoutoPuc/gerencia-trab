@@ -23,8 +23,7 @@ jobs:
       - run:
           name: Run Jest tests
           command: |
-            npm test  # Run your tests with Jest (e.g., npx jest)
-
+            npx jest
   deploy:
     docker:
       - image: circleci/node:16
