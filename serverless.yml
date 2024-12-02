@@ -50,4 +50,4 @@ resources:
 
 package:
   include:
-    - src/**  # This includes everything inside the src folder for the deployment package
+    - src/**
