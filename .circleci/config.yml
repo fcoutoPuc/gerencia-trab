@@ -18,16 +18,29 @@ jobs:
           name: Run Jest tests
           command: |
             npm test
+
   deploy:
     docker:
       - image: circleci/node:16
     steps:
       - checkout
       - run:
-          name: Deploy Lambda (optional)
+          name: Install dependencies
           command: |
-            # Add your Lambda deployment commands here if needed
-            echo "Deploying Lambda..." # Placeholder for deployment step
+            npm install
+      - run:
+          name: Install Serverless Framework
+          command: |
+            npm install -g serverless
+      - run:
+          name: Deploy Lambda using Serverless
+          command: |
+            # Set up AWS credentials (ensure these are set as environment variables in CircleCI)
+            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+            export AWS_REGION=$AWS_REGION
+            # Deploy Lambda function using Serverless
+            serverless deploy
 
 workflows:
   version: 2
@@ -37,3 +50,6 @@ workflows:
       - deploy:
           requires:
             - run_tests
+          filters:
+            branches:
+              only: main  # Only deploy on the 'main' branch
