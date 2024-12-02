@@ -3,27 +3,32 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:16 # Choose the Node.js Docker image version that matches your project
-    working_directory: ~/repo # Set the working directory to the root of your repository
+      - image: circleci/node:16  # Ensure the node version matches your local environment
+    working_directory: ~/repo
 
 jobs:
   install_dependencies:
     executor: node-executor
     steps:
-      - checkout # Checks out the code from your repository
+      - checkout
+      - run:
+          name: Clean npm cache
+          command: npm cache clean --force  # Ensure clean cache
       - run:
           name: Install dependencies
-          command: |
-            npm install  # Install all the required dependencies
+          command: npm install --legacy-peer-deps  # Add --legacy-peer-deps if there are dependency issues
+      - run:
+          name: Verify package installation
+          command: npm list --depth=0  # Verify that all packages are installed correctly
 
   run_tests:
     executor: node-executor
     steps:
-      - checkout  # Check out your code
+      - checkout
       - run:
           name: Run Jest tests
-          command: |
-            npx jest
+          command: npx jest --verbose  # Run jest with verbose to capture more logs
+
   deploy:
     docker:
       - image: circleci/node:16
@@ -32,8 +37,7 @@ jobs:
       - run:
           name: Deploy Lambda (optional)
           command: |
-            # Add your Lambda deployment commands here if needed
-            echo "Deploying Lambda..." # Placeholder for deployment step
+            echo "Deploying Lambda..."
 
 workflows:
   version: 2
