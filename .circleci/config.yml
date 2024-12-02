@@ -33,7 +33,7 @@ workflows:
   version: 2
   test_and_deploy:
     jobs:
-      - run_tests:
+      - run_tests
       - deploy:
           requires:
             - run_tests
