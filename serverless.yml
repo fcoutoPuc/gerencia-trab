@@ -8,6 +8,8 @@ custom:
   esbuild:
     bundle: true
     minify: false
+  serverless-offline:
+    httpPort: 3000  # You can change this port if needed
 
 provider:
   name: aws
@@ -32,7 +34,7 @@ functions:
   api:
     handler: handler.handler
     events:
-      - httpApi: "*"
+      - httpApi: "*"  # This will expose all HTTP endpoints from your Lambda
 
 resources:
   Resources:
@@ -47,6 +49,9 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.tableName}
+
+plugins:
+  - serverless-offline  # Adding the plugin to run API Gateway offline
 
 package:
   include:

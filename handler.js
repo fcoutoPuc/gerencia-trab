@@ -22,11 +22,11 @@ app.delete('/products/:id', deleteProduct);
 
 app.get('/products', listProducts);
 
-// app.get('/teste/products', async (req, res) => {
-//     return res.status(200).json({
-//         name: 'Hello',
-//     });
-// });
+app.get('/teste/products', async (req, res) => {
+    return res.status(200).json({
+        name: 'Hello',
+    });
+});
 
 app.use((req, res, next) => {
     return res.status(404).json({
