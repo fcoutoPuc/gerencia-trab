@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:18
+      - image: cimg/node:23.3.0
 
 jobs:
   run_tests:
@@ -21,7 +21,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:18
+      - image: cimg/node:23.3.0
     steps:
       - checkout
       - run:
@@ -50,4 +50,4 @@ workflows:
             - run_tests
           filters:
             branches:
-              only: feature/deploy 
+              only: feature/deploy
