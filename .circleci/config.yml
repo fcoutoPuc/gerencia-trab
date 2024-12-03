@@ -50,4 +50,4 @@ workflows:
             - run_tests
           filters:
             branches:
-              only: main
+              only: feature/deploy 
