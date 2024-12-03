@@ -18,6 +18,9 @@ jobs:
           name: Run Jest tests
           command: |
             npm test
+      - run:
+          name: Run Integration Tests
+          command: npm run start-and-test
 
   deploy:
     docker:
