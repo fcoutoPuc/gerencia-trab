@@ -8,7 +8,7 @@
     "test": "npx jest",
     "start": "npx serverless offline start",
     "test:e2e": "jest --testMatch \"**/test/**/*.e2e.js\"",
-    "start-and-test": "npm run start & sleep 10 && npm run test:e2e"
+    "start-and-test": "npm run start & sleep 20 && npm run test:e2e"
 
   },
   "author": "",
