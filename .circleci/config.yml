@@ -19,14 +19,8 @@ jobs:
           command: |
             npm test
       - run:
-          name: Build Application
-          command: | 
-            nohup npm run start &
-            sleep 20
-            exit 0
-      - run:
           name: Run Integration Tests
-          command: npm run test:e2e
+          command: npm run start-and-test
 
   deploy:
     docker:
