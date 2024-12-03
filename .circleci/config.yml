@@ -19,15 +19,10 @@ jobs:
           command: |
             npm test
       - run:
-          name: Start server in background
-          command: |
-            nohup npx serverless offline start &
-            # Wait for the server to be up and ready
-            until curl --silent --fail http://localhost:3000; do
-              echo "Waiting for server to be ready..."
-              sleep 5
-            done
-            echo "Server is ready"
+          name: Build Application
+          command: | 
+            nohup npm run start &
+            sleep 20
       - run:
           name: Run Integration Tests
           command: npm run test:e2e
