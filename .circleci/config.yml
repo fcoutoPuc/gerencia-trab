@@ -48,4 +48,4 @@ workflows:
             - run_tests
           filters:
             branches:
-              only: feature/deploy
+              only: main
