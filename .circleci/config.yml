@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Build Application
           command: | 
-            npm run start &
+            nohup npm run start &
             sleep 20
             exit 0
       - run:
